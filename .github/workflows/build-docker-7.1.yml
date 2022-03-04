@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: build-docker-7.1
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    paths: 
+      - 'scripts/**'
+      - 'dockerfile/7.0-7.2-apache'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      ## php 7.1
+      - name: Build php:7.1-apache
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          build-args: 
+            USE_PHP_VERSION=7.1
+          file: ./dockerfile/7.0-7.2-apache
+          tags: toroxx12/php:7.1-apache
