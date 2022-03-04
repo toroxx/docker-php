@@ -43,7 +43,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
     
 COPY ../scripts /scripts
-RUN chmod -R +x scripts
+RUN chmod -R a+x /scripts
 
 CMD ["/scripts/init.sh"]
 
