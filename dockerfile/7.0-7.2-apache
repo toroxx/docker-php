@@ -45,11 +45,14 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
 COPY ../scripts /scripts
-RUN chmod -R a+x /scripts
+RUN chmod -R a+x /scripts \
+    && echo "It works, <?php echo phpversion() ?>" > /var/www/index.php
+
 
 CMD ["/scripts/init.sh"]
 
 EXPOSE 80
+EXPOSE 443
 STOPSIGNAL SIGTERM
 
 
