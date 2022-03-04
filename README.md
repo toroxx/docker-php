@@ -14,15 +14,34 @@ docker php + composer with apache
 - 8.0
   soap, opcache, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip
 
+## How to Build
+
+- Use build.sh
+
+  ```bash
+  $ ./build.sh
+  ```
+
 ## How to use
 
-- dockerhub: toroxx12/php-**{{version}}**-apache
+docker run
 
-  ```
-  docker pull toroxx12/php-7.0-apache
-  ```
-- use build.sh
+```bash
+  $ docker run -p 8080:80 toroxx12/php:7.0-apache
 
-  ```
-  sh build.sh
-  ```
+```
+
+docker composer
+
+```yaml
+version: '3.3'
+
+services:
+  php70:
+    image: toroxx12/php:7.0-apache
+    volumes:
+      - /var/www/html/:/var/www/html/
+      - /<config path>/:/etc/apache2/sites-enabled/
+    ports:
+      - 8080:80
+```
