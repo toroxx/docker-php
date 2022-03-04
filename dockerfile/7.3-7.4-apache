@@ -1,0 +1,52 @@
+ARG USE_PHP_VERSION
+
+FROM php:${USE_PHP_VERSION}-apache
+
+LABEL NAME="toroxx12/php"
+LABEL Version="${USE_PHP_VERSION}"
+LABEL MAINTAINER="lawrencelau"
+
+#VOLUME [ "/etc/httpd","/var/www/html","/etc/cron.d" ]
+
+RUN apt-get update && apt-get install -y \
+    && apt-get install -y build-essential libssl-dev libfreetype6-dev \
+    zlib1g-dev libcurl4-gnutls-dev libpng-dev libjpeg62-turbo-dev vim \
+    libmcrypt-dev libicu-dev libxml2-dev libwebp-dev libldap-dev libzip-dev libonig-dev
+
+RUN docker-php-ext-install xmlrpc
+
+RUN docker-php-ext-install soap \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-install curl \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install ldap \
+    && docker-php-ext-install mysqli \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install xml \
+    && docker-php-ext-install zip
+
+RUN apt-get clean
+
+RUN a2enmod rewrite
+
+RUN mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+RUN sed -i 's/^error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT/' /usr/local/etc/php/php.ini
+
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');" \
+    && mv composer.phar /usr/local/bin/composer
+    
+COPY ../scripts /scripts
+RUN chmod -R +x scripts
+
+CMD ["/scripts/init.sh"]
+
+EXPOSE 80
+STOPSIGNAL SIGTERM
+
