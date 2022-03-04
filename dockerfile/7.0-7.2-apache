@@ -6,7 +6,6 @@ LABEL NAME="toroxx12/php"
 LABEL Version="${USE_PHP_VERSION}"
 LABEL MAINTAINER="lawrencelau"
 
-#VOLUME [ "/etc/httpd","/var/www/html","/etc/cron.d" ]
 
 RUN apt-get update && apt-get install -y \
     && apt-get install -y build-essential libssl-dev libfreetype6-dev \
@@ -46,7 +45,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 COPY ../scripts /scripts
 RUN chmod -R a+x /scripts \
-    && echo "It works, <?php echo phpversion() ?>" > /var/www/index.php
+    && echo "<h1>It works, <?php echo phpversion() ?></h1>" > /var/www/html/index.php
 
 
 CMD ["/scripts/init.sh"]

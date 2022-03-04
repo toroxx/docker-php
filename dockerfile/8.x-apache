@@ -42,7 +42,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 COPY ../scripts /scripts
 RUN chmod -R a+x /scripts \
-    && echo "It works, <?php echo phpversion() ?>" > /var/www/index.php
+    && echo "<h1>It works, <?php echo phpversion() ?></h1>" > /var/www/html/index.php
 
 
 CMD ["/scripts/init.sh"]
@@ -50,4 +50,5 @@ CMD ["/scripts/init.sh"]
 EXPOSE 80
 EXPOSE 443
 STOPSIGNAL SIGTERM
+
 
