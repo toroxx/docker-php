@@ -6,21 +6,21 @@ docker php + composer with apache
 
 ### 7.x
 
-- 7.0, 7.1, 7.2, 7.3, 7.4
+- 7.0, 7.1, 7.2, 7.3, 7.4  
   xmlrpc, soap, opcache, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip
 
 ### 8.x
 
-- 8.0
+- 8.0, 8.1
   soap, opcache, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip
 
 ## How to Build
 
-- Use build.sh
+Use build.sh
 
-  ```bash
-  $ ./build.sh
-  ```
+```bash
+$ ./build.sh
+```
 
 ## How to use
 
@@ -44,4 +44,5 @@ services:
       - /<config path>/:/etc/apache2/sites-enabled/
     ports:
       - 8080:80
+      - 8443:443
 ```
