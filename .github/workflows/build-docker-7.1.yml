@@ -7,6 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     paths: 
+      - '.github/workflows/build-docker-7.1.yml'
       - 'scripts/**'
       - 'dockerfile/7.0-7.2-apache'
 
