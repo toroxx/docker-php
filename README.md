@@ -29,10 +29,9 @@ docker run
 docker composer
 
 ```yaml
-version: '3.3'
 
 services:
-  php70:
+  php85:
     image: toroxx12/php:8.5-apache
     volumes:
       - /var/www/html/:/var/www/html/
