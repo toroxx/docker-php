@@ -4,15 +4,10 @@ docker php + composer with apache
 
 ## Version and Installed PHP Plugin
 
-### 7.x
-
-- 7.0, 7.1, 7.2, 7.3, 7.4  
-  xmlrpc, soap, opcache, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip
-
 ### 8.x
 
-- 8.0, 8.1
-  soap, opcache, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip
+- 8.4 8.5  
+  soap, curl, gd, intl, ldap, mysqli, pdo, pdo_mysql, mbstring, xml, zip, exif, sodium, xdebug, redis
 
 ## How to Build
 
@@ -27,7 +22,7 @@ $ ./build.sh
 docker run
 
 ```bash
-  $ docker run -p 8080:80 toroxx12/php:7.0-apache
+  $ docker run -p 8080:80 toroxx12/php:8.5-apache
 
 ```
 
@@ -38,7 +33,7 @@ version: '3.3'
 
 services:
   php70:
-    image: toroxx12/php:7.0-apache
+    image: toroxx12/php:8.5-apache
     volumes:
       - /var/www/html/:/var/www/html/
       - /<config path>/:/etc/apache2/sites-enabled/
