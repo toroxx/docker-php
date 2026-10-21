@@ -35,9 +35,18 @@ RUN docker-php-ext-install soap \
     && docker-php-ext-install exif \
     && docker-php-ext-install sodium 
 
-RUN pecl install redis \
-	&& pecl install xdebug \
-	&& docker-php-ext-enable redis xdebug
+RUN curl -fL --output /tmp/pie.phar https://github.com/php/pie/releases/latest/download/pie.phar \
+    && mv /tmp/pie.phar /usr/local/bin/pie \
+    && chmod +x /usr/local/bin/pie \
+    && pie install xdebug/xdebug \
+    && pie install phpredis/phpredis
+
+# add composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');"\
+    && mv composer.phar /usr/local/bin/composer
 
 RUN apt-get clean
 
@@ -47,11 +56,7 @@ RUN sed -i 's/^error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_S
 
 RUN a2enmod proxy && a2enmod proxy_http && a2enmod proxy_http2 && a2enmod proxy_wstunnel && a2enmod ssl
 
-# add composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');"
+
 
 COPY scripts /scripts
 RUN chmod -R a+x /scripts
